@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Moderno Home Depot — Davao City | Kitchen, Bath &amp; Materials House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    --white:#FFFFFF;
+    --black:#111111;
+    --gold:#C8A96A;
+    --gold-soft:rgba(200,169,106,0.35);
+    --gray:#8A8680;
+    --beige:#F3EFE7;
+    --glass:rgba(255,255,255,0.55);
+
+    --bg:#FFFFFF;
+    --bg-2:#F7F5F1;
+    --fg:#111111;
+    --fg-muted:#6B655C;
+    --border:rgba(17,17,17,0.10);
+    --card:#FFFFFF;
+    --nav-bg:rgba(255,255,255,0.72);
+  }
+  html.dark{
+    --bg:#0C0C0B;
+    --bg-2:#141311;
+    --fg:#F5F2EA;
+    --fg-muted:#A39C8F;
+    --border:rgba(245,242,234,0.10);
+    --card:#161513;
+    --nav-bg:rgba(12,12,11,0.7);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Manrope', sans-serif;
+    font-weight:400;
+    overflow-x:hidden;
+    transition:background .5s ease, color .5s ease;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    line-height:1.05;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+  button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+  .eyebrow{
+    font-family:'Manrope', sans-serif;
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .wrap{max-width:1320px; margin:0 auto; padding:0 40px;}
+  @media (max-width:768px){ .wrap{padding:0 22px;} }
+
+  ::selection{background:var(--gold); color:#111;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    background:var(--nav-bg);
+    border-bottom:1px solid var(--border);
+    transition:background .5s ease, border-color .5s ease;
+  }
+  .nav-inner{
+    max-width:1320px; margin:0 auto; padding:0 40px;
+    height:82px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces', serif; font-size:18px; letter-spacing:0.01em; font-weight:600;
+    display:flex; align-items:center; gap:9px; white-space:nowrap;
+  }
+  .logo .mark{
+    width:9px; height:9px; border-radius:2px; background:var(--gold);
+    transform:rotate(45deg);
+  }
+  .nav-links{display:flex; gap:38px; align-items:center;}
+  .nav-links a{
+    font-size:13.5px; font-weight:600; letter-spacing:0.03em; position:relative;
+    padding:6px 0; color:var(--fg-muted);
+    transition:color .3s ease;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; height:1px; width:0;
+    background:var(--gold); transition:width .35s cubic-bezier(.22,1,.36,1);
+  }
+  .nav-links a:hover{color:var(--fg);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-right{display:flex; align-items:center; gap:22px;}
+  .theme-toggle{
+    width:42px; height:24px; border-radius:20px; background:var(--border);
+    position:relative; transition:background .3s ease;
+  }
+  .theme-toggle .dot{
+    position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%;
+    background:var(--gold); transition:transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  html.dark .theme-toggle .dot{transform:translateX(18px);}
+  .btn-primary{
+    padding:12px 26px; background:var(--black); color:#fff; border-radius:100px;
+    font-size:13px; font-weight:700; letter-spacing:0.03em;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .35s cubic-bezier(.22,1,.36,1), background .3s ease;
+  }
+  html.dark .btn-primary{background:var(--gold); color:#111;}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .burger{display:none;}
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .burger{display:block; width:24px; height:18px; position:relative;}
+    .burger span{position:absolute; left:0; right:0; height:2px; background:var(--fg); border-radius:2px;}
+    .burger span:nth-child(1){top:0;} .burger span:nth-child(2){top:8px;} .burger span:nth-child(3){top:16px;}
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative; height:100vh; min-height:680px; display:flex; align-items:center;
+    overflow:hidden; background:var(--black); color:#fff;
+  }
+  #particles{position:absolute; inset:0; z-index:1;}
+  .hero-glow{
+    position:absolute; width:900px; height:900px; border-radius:50%; z-index:0;
+    background:radial-gradient(circle, var(--gold-soft) 0%, transparent 70%);
+    filter:blur(40px); pointer-events:none;
+    top:-200px; right:-200px;
+  }
+  .hero-content{position:relative; z-index:2; width:100%;}
+  .hero-eyebrow{
+    font-size:12px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold);
+    font-weight:700; margin-bottom:24px; opacity:0;
+  }
+  .hero h1{
+    font-size:clamp(46px, 8vw, 108px); color:#fff; font-weight:400;
+    max-width:1000px;
+  }
+  .hero h1 .line{overflow:hidden; display:block;}
+  .hero h1 .line span{display:inline-block; transform:translateY(110%);}
+  .hero h1 em{font-style:italic; color:var(--gold); font-weight:300;}
+  .hero-sub{
+    margin-top:28px; font-size:17px; color:rgba(255,255,255,0.65); max-width:480px;
+    font-weight:300; line-height:1.7; opacity:0;
+  }
+  .hero-ctas{margin-top:44px; display:flex; gap:16px; align-items:center; opacity:0;}
+  .btn-ghost{
+    padding:16px 32px; border:1px solid rgba(255,255,255,0.3); border-radius:100px;
+    color:#fff; font-size:13.5px; font-weight:700; letter-spacing:0.03em;
+    transition:all .35s cubic-bezier(.22,1,.36,1);
+  }
+  .btn-ghost:hover{background:#fff; color:#111; border-color:#fff;}
+  .btn-gold{
+    padding:16px 32px; background:var(--gold); color:#111; border-radius:100px;
+    font-size:13.5px; font-weight:700; letter-spacing:0.03em;
+    transition:transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .btn-gold:hover{transform:translateY(-3px);}
+  .scroll-cue{
+    position:absolute; bottom:40px; left:40px; z-index:2; display:flex; align-items:center; gap:12px;
+    color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+  }
+  .scroll-line{width:1px; height:46px; background:rgba(255,255,255,0.25); position:relative; overflow:hidden;}
+  .scroll-line::after{
+    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--gold);
+    animation:scrollDown 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollDown{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
+
+  /* ===== SECTION GENERIC ===== */
+  section{position:relative;}
+  .section-pad{padding:150px 0;}
+  @media (max-width:768px){ .section-pad{padding:90px 0;} }
+  .section-head{max-width:640px; margin-bottom:70px;}
+  .section-head h2{font-size:clamp(32px,4.2vw,54px); font-weight:400; margin-top:16px;}
+  .section-head p{margin-top:20px; color:var(--fg-muted); font-size:16px; line-height:1.7; font-weight:300;}
+
+  /* ===== COLLECTIONS ===== */
+  .collections-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:24px;
+  }
+  @media (max-width:1000px){ .collections-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .collections-grid{grid-template-columns:1fr;} }
+  .collection-card{
+    position:relative; border-radius:20px; overflow:hidden; aspect-ratio:3/4.1;
+    background:var(--bg-2); border:1px solid var(--border);
+    cursor:pointer;
+  }
+  .collection-card .img{
+    position:absolute; inset:0; background-size:cover; background-position:center;
+    transform:scale(1.08); transition:transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .collection-card:hover .img{transform:scale(1.18);}
+  .collection-card::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+    z-index:1;
+  }
+  .collection-card .content{
+    position:absolute; left:24px; right:24px; bottom:24px; z-index:2; color:#fff;
+  }
+  .collection-card .num{font-size:11px; letter-spacing:0.2em; color:var(--gold); font-weight:700; margin-bottom:10px; display:block;}
+  .collection-card h3{font-size:24px; color:#fff; font-weight:400;}
+  .collection-card .arrow{
+    margin-top:14px; width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,0.4);
+    display:flex; align-items:center; justify-content:center;
+    transform:translateX(0); transition:all .35s cubic-bezier(.22,1,.36,1);
+  }
+  .collection-card:hover .arrow{background:var(--gold); border-color:var(--gold); transform:translateX(6px);}
+
+  /* ===== MATERIALS IN MOTION (signature horizontal) ===== */
+  .motion-section{background:var(--black); color:#fff; overflow:hidden;}
+  .motion-pin{height:100vh; display:flex; align-items:center; position:relative;}
+  .motion-head{position:absolute; top:90px; left:0; right:0; z-index:3;}
+  .motion-track{display:flex; gap:0; will-change:transform;}
+  .motion-panel{
+    flex:0 0 auto; width:52vw; min-width:420px; height:64vh; margin-right:60px;
+    position:relative; border-radius:22px; overflow:hidden;
+  }
+  @media (max-width:768px){ .motion-panel{width:82vw; min-width:280px; height:52vh;} }
+  .motion-panel .img{position:absolute; inset:0; background-size:cover; background-position:center;}
+  .motion-panel .tag{
+    position:absolute; top:24px; left:24px; z-index:2;
+    background:rgba(0,0,0,0.4); backdrop-filter:blur(10px);
+    padding:8px 16px; border-radius:100px; font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+    border:1px solid rgba(255,255,255,0.2);
+  }
+  .motion-panel .caption{
+    position:absolute; left:24px; right:24px; bottom:24px; z-index:2;
+  }
+  .motion-panel .caption h4{font-size:26px; color:#fff; font-weight:400;}
+  .motion-panel .caption p{font-size:13px; color:rgba(255,255,255,0.65); margin-top:6px; max-width:320px;}
+  .motion-panel::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.7) 100%);
+  }
+  .motion-panel.spacer{background:none;}
+
+  /* ===== WHY CHOOSE US ===== */
+  .why-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:80px; align-items:start;}
+  @media (max-width:900px){ .why-grid{grid-template-columns:1fr; gap:50px;} }
+  .stat-list{display:flex; flex-direction:column; gap:0;}
+  .stat-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:28px 0; border-bottom:1px solid var(--border);
+  }
+  .stat-row .num{font-family:'Fraunces', serif; font-size:44px; color:var(--gold); font-weight:400;}
+  .stat-row .label{font-size:14px; color:var(--fg-muted); max-width:220px; text-align:right;}
+  .why-points{display:flex; flex-direction:column; gap:34px;}
+  .why-point{display:flex; gap:20px;}
+  .why-point .ico{
+    width:46px; height:46px; border-radius:50%; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--gold);
+  }
+  .why-point h4{font-size:18px; font-weight:500; margin-bottom:6px;}
+  .why-point p{font-size:14px; color:var(--fg-muted); line-height:1.6; font-weight:300;}
+
+  /* ===== GALLERY ===== */
+  .gallery-filter{display:flex; gap:10px; margin-bottom:40px; flex-wrap:wrap;}
+  .filter-btn{
+    padding:10px 20px; border-radius:100px; border:1px solid var(--border); font-size:13px; font-weight:600;
+    color:var(--fg-muted); transition:all .3s ease;
+  }
+  .filter-btn.active, .filter-btn:hover{background:var(--fg); color:var(--bg); border-color:var(--fg);}
+  .masonry{columns:3 260px; gap:20px;}
+  @media (max-width:700px){ .masonry{columns:1;} }
+  .masonry-item{
+    break-inside:avoid; margin-bottom:20px; border-radius:16px; overflow:hidden; position:relative;
+    cursor:pointer;
+  }
+  .masonry-item .img{width:100%; display:block; transition:transform .8s cubic-bezier(.22,1,.36,1);}
+  .masonry-item:hover .img{transform:scale(1.06);}
+  .masonry-item .overlay{
+    position:absolute; inset:0; background:rgba(17,17,17,0.0); display:flex; align-items:flex-end;
+    padding:18px; opacity:0; transition:all .4s ease;
+  }
+  .masonry-item:hover .overlay{opacity:1; background:rgba(17,17,17,0.35);}
+  .masonry-item .overlay span{color:#fff; font-size:13px; font-weight:600; letter-spacing:0.05em;}
+
+  /* ===== TESTIMONIALS ===== */
+  .testi-section{background:var(--bg-2);}
+  .testi-wrap{position:relative; max-width:760px; margin:0 auto; text-align:center;}
+  .testi-quote{font-family:'Fraunces', serif; font-size:clamp(22px,3vw,32px); font-weight:400; line-height:1.5; font-style:italic;}
+  .testi-author{margin-top:34px; display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .testi-author .name{font-weight:700; font-size:14px;}
+  .testi-author .role{font-size:13px; color:var(--fg-muted);}
+  .testi-dots{display:flex; justify-content:center; gap:10px; margin-top:44px;}
+  .testi-dot{width:8px; height:8px; border-radius:50%; background:var(--border); transition:all .3s ease;}
+  .testi-dot.active{background:var(--gold); width:26px; border-radius:5px;}
+
+  /* ===== FAQ ===== */
+  .faq-list{max-width:820px;}
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center; padding:28px 0;
+    font-size:17px; font-weight:500; cursor:pointer;
+  }
+  .faq-plus{width:22px; height:22px; position:relative; flex-shrink:0;}
+  .faq-plus::before, .faq-plus::after{
+    content:''; position:absolute; background:var(--fg); top:50%; left:50%;
+    transform:translate(-50%,-50%);
+  }
+  .faq-plus::before{width:14px; height:1.5px;}
+  .faq-plus::after{width:1.5px; height:14px; transition:transform .3s ease;}
+  .faq-item.open .faq-plus::after{transform:translate(-50%,-50%) rotate(90deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .45s cubic-bezier(.22,1,.36,1);}
+  .faq-a p{padding-bottom:26px; color:var(--fg-muted); font-size:14.5px; line-height:1.7; font-weight:300; max-width:640px;}
+
+  /* ===== CONTACT ===== */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:70px;}
+  @media (max-width:900px){ .contact-grid{grid-template-columns:1fr; gap:50px;} }
+  .field{position:relative; margin-bottom:30px;}
+  .field input, .field textarea{
+    width:100%; background:transparent; border:none; border-bottom:1px solid var(--border);
+    padding:12px 0; font-size:16px; color:var(--fg); font-family:inherit; outline:none;
+    transition:border-color .3s ease;
+  }
+  .field textarea{resize:none; min-height:80px;}
+  .field label{
+    position:absolute; left:0; top:12px; color:var(--fg-muted); font-size:16px; pointer-events:none;
+    transition:all .25s ease;
+  }
+  .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label,
+  .field textarea:focus ~ label, .field textarea:not(:placeholder-shown) ~ label{
+    top:-14px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold);
+  }
+  .field input:focus, .field textarea:focus{border-color:var(--gold);}
+  .field-underline{position:absolute; bottom:0; left:0; height:1px; width:0; background:var(--gold); transition:width .35s ease;}
+  .field input:focus ~ .field-underline, .field textarea:focus ~ .field-underline{width:100%;}
+  .contact-info-block{margin-bottom:36px;}
+  .contact-info-block .eyebrow{margin-bottom:10px; display:block;}
+  .contact-info-block p, .contact-info-block a{font-size:15px; color:var(--fg-muted); line-height:1.8;}
+  .success-msg{
+    display:none; padding:16px 20px; border-radius:12px; background:rgba(200,169,106,0.15);
+    color:var(--gold); font-size:14px; font-weight:600; margin-top:10px; align-items:center; gap:10px;
+  }
+  .success-msg.show{display:flex;}
+
+  .whatsapp-float{
+    position:fixed; bottom:28px; right:28px; z-index:90;
+    width:58px; height:58px; border-radius:50%; background:#111;
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+    transition:transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  html.dark .whatsapp-float{background:var(--gold); color:#111;}
+  .whatsapp-float:hover{transform:scale(1.08) translateY(-2px);}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--black); color:#fff; padding:90px 0 30px;}
+  .footer-top{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:50px; padding-bottom:70px; border-bottom:1px solid rgba(255,255,255,0.1);}
+  @media (max-width:800px){ .footer-top{grid-template-columns:1fr 1fr; row-gap:40px;} }
+  .footer-top h5{font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; font-weight:700;}
+  .footer-top a{display:block; color:rgba(255,255,255,0.6); font-size:14px; margin-bottom:12px; transition:color .3s ease;}
+  .footer-top a:hover{color:#fff;}
+  .footer-logo{font-family:'Fraunces', serif; font-size:26px; margin-bottom:16px;}
+  .footer-desc{color:rgba(255,255,255,0.5); font-size:14px; line-height:1.7; max-width:280px; font-weight:300;}
+  .footer-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:28px; flex-wrap:wrap; gap:14px;}
+  .footer-bottom p{color:rgba(255,255,255,0.4); font-size:12.5px;}
+
+  .fade-up{opacity:0; transform:translateY(40px);}
+
+  ::-webkit-scrollbar{width:9px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--gold); border-radius:10px;}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="logo"><span class="mark"></span>Moderno&nbsp;Home&nbsp;Depot</div>
+    <div class="nav-links">
+      <a href="#collections">Collections</a>
+      <a href="#materials">Materials</a>
+      <a href="#gallery">Projects</a>
+      <a href="#why">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="theme-toggle" id="themeToggle"><div class="dot"></div></div>
+      <a href="#contact" class="btn-primary">Book a Consult</a>
+      <div class="burger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <canvas id="particles"></canvas>
+  <div class="hero-glow" id="heroGlow"></div>
+  <div class="wrap hero-content">
+    <div class="hero-eyebrow" id="heroEyebrow">Davao City · Kitchen · Bath · Tile · Lighting · Construction Materials</div>
+    <h1>
+      <span class="line"><span>Spaces built</span></span>
+      <span class="line"><span>from <em>honest</em></span></span>
+      <span class="line"><span>materials.</span></span>
+    </h1>
+    <p class="hero-sub" id="heroSub">
+      Moderno Home Depot sources and crafts kitchens, bathrooms, tile, lighting and sanitary ware in Davao City, for people who notice the difference between good and exceptional.
+    </p>
+    <div class="hero-ctas" id="heroCtas">
+      <a href="#collections" class="btn-gold">Explore Collections</a>
+      <a href="#gallery" class="btn-ghost">View Projects</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+</header>
+
+<!-- ============ FEATURED COLLECTIONS ============ -->
+<section class="section-pad" id="collections">
+  <div class="wrap">
+    <div class="section-head fade-up">
+      <span class="eyebrow">Featured Collections</span>
+      <h2>Four rooms. One standard.</h2>
+      <p>Every collection is curated for material honesty first, ornament second — so a decade from now, it still looks considered rather than trendy.</p>
+    </div>
+    <div class="collections-grid">
+      <div class="collection-card fade-up">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop')"></div>
+        <div class="content">
+          <span class="num">01 — Kitchen</span>
+          <h3>The Kitchen<br>Collection</h3>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+      <div class="collection-card fade-up">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&auto=format&fit=crop')"></div>
+        <div class="content">
+          <span class="num">02 — Bath</span>
+          <h3>The Bathroom<br>Collection</h3>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+      <div class="collection-card fade-up">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop')"></div>
+        <div class="content">
+          <span class="num">03 — Tile</span>
+          <h3>The Tile<br>Collection</h3>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+      <div class="collection-card fade-up">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1524634126442-357e0eac3c14?q=80&w=800&auto=format&fit=crop')"></div>
+        <div class="content">
+          <span class="num">04 — Lighting</span>
+          <h3>The Lighting<br>Collection</h3>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATERIALS IN MOTION (signature) ============ -->
+<section class="motion-section" id="materials">
+  <div class="motion-pin" id="motionPin">
+    <div class="motion-head wrap">
+      <span class="eyebrow">Materials in Motion</span>
+      <h2 style="color:#fff; margin-top:16px; font-size:clamp(28px,3.4vw,44px); font-weight:400;">From quarry and kiln<br>to your home.</h2>
+    </div>
+    <div class="motion-track" id="motionTrack" style="padding-left:6vw;">
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Raw · Quarry Block</span>
+        <div class="caption"><h4>Calacatta Marble</h4><p>Cut from a single block in Northern Italy, book-matched for grain continuity.</p></div>
+      </div>
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Finished · Countertop</span>
+        <div class="caption"><h4>Kitchen Island Slab</h4><p>Honed to a satin finish, edge detailed by hand in our workshop.</p></div>
+      </div>
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Raw · Cast Ingot</span>
+        <div class="caption"><h4>Solid Brass</h4><p>Sand-cast in small batches, no plating — the patina is the point.</p></div>
+      </div>
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Finished · Fixture</span>
+        <div class="caption"><h4>Brass Tapware</h4><p>Machined and polished, built to age into a deeper, warmer gold.</p></div>
+      </div>
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Raw · Clay Body</span>
+        <div class="caption"><h4>Porcelain Clay</h4><p>Fired twice at 1,200°C for a body that resists staining permanently.</p></div>
+      </div>
+      <div class="motion-panel">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1618219944342-824e40a13285?q=80&w=1200&auto=format&fit=crop')"></div>
+        <span class="tag">Finished · Floor Tile</span>
+        <div class="caption"><h4>Large-Format Porcelain</h4><p>Laid edge-to-edge for a floor that reads as one continuous surface.</p></div>
+      </div>
+      <div class="motion-panel spacer" style="width:6vw; min-width:6vw;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE US ============ -->
+<section class="section-pad" id="why">
+  <div class="wrap why-grid">
+    <div>
+      <div class="section-head fade-up" style="margin-bottom:50px;">
+        <span class="eyebrow">Why Moderno</span>
+        <h2>Twenty-two years of specifying materials that outlast trends.</h2>
+      </div>
+      <div class="stat-list">
+        <div class="stat-row fade-up"><span class="num" data-count="22">0</span><span class="label">Years designing kitchens, baths &amp; interiors</span></div>
+        <div class="stat-row fade-up"><span class="num" data-count="1400">0</span><span class="label">Projects completed across the region</span></div>
+        <div class="stat-row fade-up"><span class="num" data-count="60">0</span><span class="label">Partner mills, foundries &amp; quarries</span></div>
+        <div class="stat-row fade-up"><span class="num" data-count="98">0</span><span class="label">% of clients who refer a friend</span></div>
+      </div>
+    </div>
+    <div class="why-points">
+      <div class="why-point fade-up">
+        <div class="ico">✦</div>
+        <div><h4>Sourced, not stocked</h4><p>We visit the quarries and foundries ourselves — every material is chosen, not simply catalogued.</p></div>
+      </div>
+      <div class="why-point fade-up">
+        <div class="ico">◐</div>
+        <div><h4>One point of contact</h4><p>A single designer follows your project from first sketch through final installation day.</p></div>
+      </div>
+      <div class="why-point fade-up">
+        <div class="ico">△</div>
+        <div><h4>Built for a lifetime</h4><p>Solid materials over veneers, always — we specify what we'd install in our own homes.</p></div>
+      </div>
+      <div class="why-point fade-up">
+        <div class="ico">◆</div>
+        <div><h4>In-house workshop</h4><p>Cutting, finishing and fitting happen under one roof, so tolerances stay tight.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="section-pad" id="gallery" style="background:var(--bg-2);">
+  <div class="wrap">
+    <div class="section-head fade-up">
+      <span class="eyebrow">Project Gallery</span>
+      <h2>Recently completed.</h2>
+    </div>
+    <div class="gallery-filter fade-up">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+      <button class="filter-btn" data-filter="bath">Bathroom</button>
+      <button class="filter-btn" data-filter="tile">Tile</button>
+      <button class="filter-btn" data-filter="lighting">Lighting</button>
+    </div>
+    <div class="masonry fade-up" id="masonry">
+      <div class="masonry-item" data-cat="kitchen"><img class="img" src="https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Bajada Residence — Kitchen</span></div></div>
+      <div class="masonry-item" data-cat="bath"><img class="img" src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Buhangin Loft — Bathroom</span></div></div>
+      <div class="masonry-item" data-cat="tile"><img class="img" src="https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Maa House — Tile Floor</span></div></div>
+      <div class="masonry-item" data-cat="lighting"><img class="img" src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Ecoland — Pendant Lighting</span></div></div>
+      <div class="masonry-item" data-cat="kitchen"><img class="img" src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Matina — Island Kitchen</span></div></div>
+      <div class="masonry-item" data-cat="bath"><img class="img" src="https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Lanang Flat — Ensuite</span></div></div>
+      <div class="masonry-item" data-cat="tile"><img class="img" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Studio 9 — Wall Tile</span></div></div>
+      <div class="masonry-item" data-cat="lighting"><img class="img" src="https://images.unsplash.com/photo-1524634126442-357e0eac3c14?q=80&w=700&auto=format&fit=crop"><div class="overlay"><span>Toril — Sconce Detail</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section-pad testi-section">
+  <div class="wrap testi-wrap">
+    <span class="eyebrow">Client Words</span>
+    <div style="margin-top:36px; min-height:160px;" id="testiSlot">
+      <p class="testi-quote">"They didn't just sell us tile — they walked us through three kilns before we picked one. The floor still looks new eleven years later."</p>
+      <div class="testi-author"><span class="name">Renata Cruz</span><span class="role">Homeowner, Matina</span></div>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section-pad" id="faq">
+  <div class="wrap">
+    <div class="section-head fade-up">
+      <span class="eyebrow">Questions</span>
+      <h2>Before you reach out.</h2>
+    </div>
+    <div class="faq-list fade-up" id="faqList">
+      <div class="faq-item open">
+        <div class="faq-q"><span>Do you handle full renovations or only supply materials?</span><div class="faq-plus"></div></div>
+        <div class="faq-a"><p>Both. You can order materials directly, or bring us in from concept through installation with our in-house design and fitting team.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>How long does a kitchen or bathroom project take?</span><div class="faq-plus"></div></div>
+        <div class="faq-a"><p>A bathroom typically runs 4–6 weeks from confirmed design; a full kitchen is 8–12 weeks, largely dictated by stone and cabinetry lead times.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Can I see materials in person before ordering?</span><div class="faq-plus"></div></div>
+        <div class="faq-a"><p>Yes — our showroom holds full slabs, tile panels and working fixtures, and we encourage a visit before any final decision.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Do you offer warranties on installed work?</span><div class="faq-plus"></div></div>
+        <div class="faq-a"><p>All installations carry a 10-year workmanship warranty; material warranties vary by manufacturer and are provided at order.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Do you ship materials outside the region?</span><div class="faq-plus"></div></div>
+        <div class="faq-a"><p>We ship nationally for material-only orders. Full design and installation service is currently limited to our local service area.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section-pad" id="contact" style="background:var(--bg-2);">
+  <div class="wrap contact-grid">
+    <div class="fade-up">
+      <span class="eyebrow">Get in Touch</span>
+      <h2 style="margin-top:16px; font-size:clamp(28px,3.4vw,42px); font-weight:400;">Let's talk about your space.</h2>
+      <div style="margin-top:44px;">
+        <div class="contact-info-block">
+          <span class="eyebrow">Showroom</span>
+          <p>J.P. Laurel Avenue, Davao City<br>Open Tuesday – Saturday</p>
+        </div>
+        <div class="contact-info-block">
+          <span class="eyebrow">Hours</span>
+          <p>Tue – Fri &nbsp; 9:00 – 18:00<br>Saturday &nbsp; 10:00 – 16:00<br>Sun – Mon &nbsp; Closed</p>
+        </div>
+        <div class="contact-info-block">
+          <span class="eyebrow">Contact</span>
+          <p><a href="mailto:hello@modernohomedepot.ph">hello@modernohomedepot.ph</a><br><a href="tel:+639000000000">+63 900 000 0000</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="fade-up">
+      <form id="contactForm">
+        <div class="field">
+          <input type="text" placeholder=" " required>
+          <label>Full name</label>
+          <div class="field-underline"></div>
+        </div>
+        <div class="field">
+          <input type="email" placeholder=" " required>
+          <label>Email address</label>
+          <div class="field-underline"></div>
+        </div>
+        <div class="field">
+          <input type="text" placeholder=" ">
+          <label>Project type (kitchen, bath, tile...)</label>
+          <div class="field-underline"></div>
+        </div>
+        <div class="field">
+          <textarea rows="4" placeholder=" "></textarea>
+          <label>Tell us about your project</label>
+          <div class="field-underline"></div>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:16px;">Send Inquiry</button>
+        <div class="success-msg" id="successMsg">✓ Thank you — we'll reply within one business day.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a href="#" class="whatsapp-float" aria-label="Chat on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.36 17.4L2 22l4.72-1.24A8.86 8.86 0 0 0 17.6 6.32ZM12 20.1a7.36 7.36 0 0 1-3.75-1.03l-.27-.16-2.79.73.75-2.72-.18-.28A7.38 7.38 0 1 1 12 20.1Zm4.05-5.53c-.22-.11-1.3-.64-1.5-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.16-.48.05-.22-.11-.94-.35-1.79-1.11-.66-.59-1.11-1.32-1.24-1.54-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.05-.11-.5-1.2-.68-1.65-.18-.43-.36-.37-.5-.38h-.43c-.15 0-.39.05-.6.28-.2.22-.79.77-.79 1.87s.81 2.17.92 2.32c.11.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.43-.06 1.3-.53 1.49-1.04.18-.51.18-.94.13-1.03-.05-.1-.2-.16-.42-.26Z" fill="currentColor"/></svg>
+</a>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Moderno Home Depot</div>
+        <p class="footer-desc">A materials house in Davao City for kitchens, bathrooms, tile, lighting and stone — sourced with intent, built to last.</p>
+      </div>
+      <div>
+        <h5>Collections</h5>
+        <a href="#collections">Kitchen</a>
+        <a href="#collections">Bathroom</a>
+        <a href="#collections">Tile</a>
+        <a href="#collections">Lighting</a>
+      </div>
+      <div>
+        <h5>Studio</h5>
+        <a href="#why">About Us</a>
+        <a href="#gallery">Projects</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div>
+        <h5>Follow</h5>
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Moderno Home Depot, Davao City. All rights reserved.</p>
+      <p>Privacy Policy · Terms of Service</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ===== THEME TOGGLE ===== */
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', ()=>{
+  document.documentElement.classList.toggle('dark');
+});
+
+/* ===== HERO TEXT REVEAL ===== */
+window.addEventListener('load', ()=>{
+  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
+  tl.to('.hero h1 .line span', {y:'0%', duration:1.1, stagger:0.12})
+    .to('#heroEyebrow', {opacity:1, duration:0.6}, 0.1)
+    .to('#heroSub', {opacity:1, duration:0.8}, 0.6)
+    .to('#heroCtas', {opacity:1, duration:0.8}, 0.8);
+});
+
+/* ===== HERO PARTICLES (canvas) ===== */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize(){
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+function initParticles(){
+  particles = Array.from({length:70}, ()=>({
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.6 + 0.4,
+    vx:(Math.random()-0.5)*0.15, vy:(Math.random()-0.5)*0.15,
+    o: Math.random()*0.5 + 0.15
+  }));
+}
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p=>{
+    p.x += p.vx; p.y += p.vy;
+    if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+    if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(200,169,106,${p.o})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+resize(); initParticles(); drawParticles();
+window.addEventListener('resize', ()=>{resize(); initParticles();});
+
+/* ===== MOUSE PARALLAX GLOW ===== */
+const heroGlow = document.getElementById('heroGlow');
+document.querySelector('.hero').addEventListener('mousemove', (e)=>{
+  const x = e.clientX / window.innerWidth;
+  const y = e.clientY / window.innerHeight;
+  gsap.to(heroGlow, {x:(x-0.5)*160, y:(y-0.5)*160, duration:1.2, ease:'power2.out'});
+  gsap.to('.hero-content', {x:(x-0.5)*-18, y:(y-0.5)*-10, duration:1.2, ease:'power2.out'});
+});
+
+/* ===== FADE UP ON SCROLL ===== */
+gsap.utils.toArray('.fade-up').forEach((el, i)=>{
+  gsap.to(el, {
+    opacity:1, y:0, duration:1, ease:'power3.out',
+    scrollTrigger:{trigger:el, start:'top 88%'},
+    delay:(i%4)*0.05
+  });
+});
+
+/* ===== MATERIALS IN MOTION — horizontal pin scroll ===== */
+ScrollTrigger.matchMedia({
+  "(min-width: 769px)": function(){
+    const track = document.getElementById('motionTrack');
+    const pin = document.getElementById('motionPin');
+    gsap.to(track, {
+      x: () => -(track.scrollWidth - pin.offsetWidth + 40),
+      ease:'none',
+      scrollTrigger:{
+        trigger:'.motion-section',
+        start:'top top',
+        end:()=> '+=' + (track.scrollWidth - pin.offsetWidth + 400),
+        scrub:1,
+        pin:true,
+        anticipatePin:1
+      }
+    });
+  }
+});
+
+/* ===== COUNT UP STATS ===== */
+gsap.utils.toArray('.stat-row .num').forEach(el=>{
+  const target = +el.dataset.count;
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: ()=>{
+      gsap.to({val:0}, {
+        val: target, duration:1.6, ease:'power2.out',
+        onUpdate: function(){ el.textContent = Math.round(this.targets()[0].val); }
+      });
+    }
+  });
+});
+
+/* ===== GALLERY FILTER ===== */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.masonry-item').forEach(item=>{
+      const match = f === 'all' || item.dataset.cat === f;
+      gsap.to(item, {opacity: match ? 1 : 0, scale: match ? 1 : 0.9, duration:0.35});
+      item.style.display = match ? 'block' : 'none';
+    });
+  });
+});
+
+/* ===== TESTIMONIALS CAROUSEL ===== */
+const testimonials = [
+  {q:"\"They didn't just sell us tile — they walked us through three kilns before we picked one. The floor still looks new eleven years later.\"", n:'Renata Cruz', r:'Homeowner, Matina'},
+  {q:'"Our architect said the brass fixtures were the best detail in the whole build. Moderno Home Depot sourced them from a foundry we never would have found."', n:'Miguel Santos', r:'Homeowner, Lanang'},
+  {q:"\"We've specified their stone on four commercial projects now. Consistent quality, and they actually answer the phone.\"", n:'Grace Villanueva', r:'Principal, Villanueva Architecture'}
+];
+let testiIndex = 0;
+const testiSlot = document.getElementById('testiSlot');
+const testiDots = document.getElementById('testiDots');
+testimonials.forEach((_,i)=>{
+  const d = document.createElement('div');
+  d.className = 'testi-dot' + (i===0 ? ' active' : '');
+  d.addEventListener('click', ()=>showTesti(i));
+  testiDots.appendChild(d);
+});
+function showTesti(i){
+  testiIndex = i;
+  gsap.to(testiSlot, {opacity:0, y:10, duration:0.3, onComplete:()=>{
+    testiSlot.innerHTML = `<p class="testi-quote">${testimonials[i].q}</p>
+      <div class="testi-author"><span class="name">${testimonials[i].n}</span><span class="role">${testimonials[i].r}</span></div>`;
+    gsap.fromTo(testiSlot, {opacity:0,y:10}, {opacity:1, y:0, duration:0.5});
+  }});
+  document.querySelectorAll('.testi-dot').forEach((d,idx)=>d.classList.toggle('active', idx===i));
+}
+setInterval(()=> showTesti((testiIndex+1) % testimonials.length), 6000);
+
+/* ===== FAQ ACCORDION ===== */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  if(item.classList.contains('open')) a.style.maxHeight = a.scrollHeight + 'px';
+  q.addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.faq-a').style.maxHeight = 0;
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      a.style.maxHeight = a.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ===== CONTACT FORM ===== */
+document.getElementById('contactForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.textContent = 'Sending...';
+  setTimeout(()=>{
+    btn.textContent = 'Send Inquiry';
+    document.getElementById('successMsg').classList.add('show');
+    e.target.reset();
+  }, 900);
+});
+
+/* ===== MOBILE BURGER (simple toggle of nav-links as overlay) ===== */
+document.querySelector('.burger').addEventListener('click', function(){
+  const links = document.querySelector('.nav-links');
+  const isShown = links.style.display === 'flex';
+  links.style.cssText = isShown ? '' : 'display:flex; flex-direction:column; position:fixed; top:82px; left:0; right:0; background:var(--bg); padding:30px; gap:24px; border-bottom:1px solid var(--border);';
+});
+</script>
+</body>
+</html>
